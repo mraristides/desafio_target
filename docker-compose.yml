@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Desafio@12345"
+    volumes:
+      - sqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Desafio@12345' -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build: ./backend
+    environment:
+      ConnectionStrings__Default: "Server=db,1433;Database=DesafioDb;User Id=sa;Password=Desafio@12345;TrustServerCertificate=True"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:8080"   # Swagger: http://localhost:5000/swagger
+
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "4200:80"     # App: http://localhost:4200
+
+volumes:
+  sqldata:

@@ -1,0 +1,76 @@
+<header><h1>Desafio Técnico - Tiago Aristides</h1></header>
+  <nav>
+    <button [class.ativo]="aba==1" (click)="aba=1; erro=''">1. Comissões</button>
+    <button [class.ativo]="aba==2" (click)="aba=2; erro=''; carregarEstoque()">2. Estoque</button>
+    <button [class.ativo]="aba==3" (click)="aba=3; erro=''">3. Juros</button>
+  </nav>
+
+  <main>
+    <!-- 1. COMISSÕES -->
+    <section class="card" *ngIf="aba==1">
+      <h2>Comissão por vendedor</h2>
+      <label>JSON de vendas</label>
+      <textarea [(ngModel)]="vendasJson"></textarea>
+      <button class="acao" (click)="calcularComissoes()">Calcular</button>
+      <div class="erro" *ngIf="erro">{{ erro }}</div>
+      <table *ngIf="comissoes.length">
+        <tr><th>Vendedor</th><th>Vendas</th><th>Total vendido</th><th>Comissão</th></tr>
+        <tr *ngFor="let c of comissoes">
+          <td>{{ c.vendedor }}</td><td>{{ c.qtdVendas }}</td>
+          <td>{{ c.totalVendido | currency:'BRL' }}</td>
+          <td><b>{{ c.comissao | currency:'BRL' }}</b></td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 2. ESTOQUE -->
+    <section *ngIf="aba==2">
+      <div class="card">
+        <h2>Lançar movimentação</h2>
+        <label>Produto</label>
+        <select [(ngModel)]="mov.codigoProduto">
+          <option *ngFor="let p of produtos" [ngValue]="p.codigoProduto">
+            {{ p.codigoProduto }} - {{ p.descricaoProduto }} (estoque: {{ p.estoque }})
+          </option>
+        </select>
+        <label>Tipo</label>
+        <select [(ngModel)]="mov.tipo"><option>Entrada</option><option>Saida</option></select>
+        <label>Quantidade</label>
+        <input type="number" min="1" [(ngModel)]="mov.quantidade">
+        <label>Descrição da movimentação</label>
+        <input [(ngModel)]="mov.descricao" placeholder="Ex.: Compra de fornecedor, Venda balcão...">
+        <button class="acao" (click)="movimentar()">Lançar</button>
+        <div class="erro" *ngIf="erro">{{ erro }}</div>
+        <div class="ok" *ngIf="resultadoMov">
+          Movimentação #{{ resultadoMov.idMovimentacao }} registrada. Estoque final de
+          "{{ resultadoMov.descricaoProduto }}": {{ resultadoMov.estoqueFinal }}
+        </div>
+      </div>
+      <div class="card">
+        <h3>Histórico</h3>
+        <table>
+          <tr><th>#</th><th>Produto</th><th>Tipo</th><th>Qtde</th><th>Descrição</th><th>Saldo</th></tr>
+          <tr *ngFor="let h of historico">
+            <td>{{ h.id }}</td><td>{{ h.codigoProduto }}</td><td>{{ h.tipo }}</td>
+            <td>{{ h.quantidade }}</td><td>{{ h.descricao }}</td><td>{{ h.saldoApos }}</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. JUROS -->
+    <section class="card" *ngIf="aba==3">
+      <h2>Cálculo de juros (2,5% ao dia)</h2>
+      <label>Valor (R$)</label>
+      <input type="number" step="0.01" [(ngModel)]="juros.valor">
+      <label>Data de vencimento</label>
+      <input type="date" [(ngModel)]="juros.dataVencimento">
+      <button class="acao" (click)="calcularJuros()">Calcular</button>
+      <div class="erro" *ngIf="erro">{{ erro }}</div>
+      <div class="ok" *ngIf="resultadoJuros">
+        Dias em atraso: {{ resultadoJuros.diasAtraso }} |
+        Juros: {{ resultadoJuros.juros | currency:'BRL' }} |
+        Total atualizado: {{ resultadoJuros.valorAtualizado | currency:'BRL' }}
+      </div>
+    </section>
+  </main>

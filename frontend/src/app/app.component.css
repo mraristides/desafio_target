@@ -1,0 +1,14 @@
+header { background: #1f3a5f; color: #fff; padding: 16px 24px; }
+nav { display: flex; gap: 8px; padding: 12px 24px; background: #e3e8ee; }
+nav button { padding: 8px 16px; border: 0; border-radius: 6px; cursor: pointer; background: #fff; }
+nav button.ativo { background: #1f3a5f; color: #fff; }
+main { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+.card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #0002; margin-bottom: 16px; }
+label { display: block; margin: 10px 0 4px; font-weight: 600; }
+input, select, textarea { width: 100%; padding: 8px; border: 1px solid #bbb; border-radius: 6px; font: inherit; }
+textarea { height: 220px; font-family: monospace; }
+button.acao { margin-top: 14px; padding: 10px 20px; border: 0; border-radius: 6px; background: #2e7d32; color: #fff; cursor: pointer; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+.erro { color: #b71c1c; margin-top: 10px; }
+.ok { color: #1b5e20; margin-top: 10px; font-weight: 600; }
